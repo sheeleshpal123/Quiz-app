@@ -199,19 +199,19 @@
                 answerButtons.appendChild(button);
             });
         }
+function selectAnswer(button, answer) {
 
-        function selectAnswer(button, answer) {
+    
+    if (selectedAnswer !== null) {
+        return;
+    }
 
-            Array.from(answerButtons.children).forEach(btn => {
-                btn.classList.remove("selected");
-            });
+    button.classList.add("selected");
 
-            button.classList.add("selected");
+    selectedAnswer = answer;
 
-            selectedAnswer = answer;
-
-            nextBtn.style.display = "block";
-        }
+    nextBtn.style.display = "block";
+}
 
         nextBtn.addEventListener("click", () => {
 
