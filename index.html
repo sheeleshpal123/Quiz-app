@@ -1,0 +1,257 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Simple Quiz App</title>
+    <link rel="stylesheet" href="Quiz.css">
+</head>
+<body>
+
+    <div class="app">
+        <h1>Simple Quiz</h1>
+
+        <div class="quiz">
+            <h2 id="question">Click Start Quiz</h2>
+
+            <div id="answer-buttons"></div>
+
+            <button id="start-btn">Start Quiz</button>
+            <button id="next-btn">Next</button>
+        </div>
+    </div>
+
+    <script>
+        const questions = [
+    {
+        question: "Which is the largest animal in the world?",
+        answers: ["Shark", "Blue Whale", "Elephant", "Giraffe"],
+        correct: "Blue Whale"
+    },
+    {
+        question: "Which is the smallest country in the world?",
+        answers: ["Vatican City", "Monaco", "San Marino", "Liechtenstein"],
+        correct: "Vatican City"
+    },
+    {
+        question: "Which is the largest desert in the world?",
+        answers: ["Kalahari", "Gobi", "Sahara", "Antarctica"],
+        correct: "Antarctica"
+    },
+    {
+        question: "Which is the largest country in the world?",
+        answers: ["India", "Russia", "Germany", "England"],
+        correct: "Russia"
+    },
+    {
+        question: "Who is the Prime Minister of India?",
+        answers: [
+            "Akhilesh Yadav",
+            "Indira Gandhi",
+            "Narendra Modi",
+            "Jawaharlal Nehru"
+        ],
+        correct: "Narendra Modi"
+    },
+    {
+        question: "What is the capital of India?",
+        answers: ["Mumbai", "Delhi", "Lucknow", "Chennai"],
+        correct: "Delhi"
+    },
+    {
+        question: "Which planet is known as the Red Planet?",
+        answers: ["Earth", "Mars", "Jupiter", "Venus"],
+        correct: "Mars"
+    },
+    {
+        question: "How many continents are there in the world?",
+        answers: ["5", "6", "7", "8"],
+        correct: "7"
+    },
+    {
+        question: "Which is the longest river in the world?",
+        answers: ["Amazon", "Nile", "Ganga", "Yangtze"],
+        correct: "Nile"
+    },
+    {
+        question: "Which is the national bird of India?",
+        answers: ["Parrot", "Peacock", "Crow", "Sparrow"],
+        correct: "Peacock"
+    },
+    {
+        question: "Which is the national animal of India?",
+        answers: ["Lion", "Elephant", "Tiger", "Leopard"],
+        correct: "Tiger"
+    },
+    {
+        question: "Who invented Java?",
+        answers: [
+            "James Gosling",
+            "Dennis Ritchie",
+            "Guido van Rossum",
+            "Bjarne Stroustrup"
+        ],
+        correct: "James Gosling"
+    },
+    {
+        question: "Which language is used for web page styling?",
+        answers: ["HTML", "JavaScript", "CSS", "Java"],
+        correct: "CSS"
+    },
+    {
+        question: "Which HTML tag is used for the largest heading?",
+        answers: ["h6", "head", "h1", "heading"],
+        correct: "h1"
+    },
+    {
+        question: "Which company developed React?",
+        answers: ["Google", "Microsoft", "Meta", "Amazon"],
+        correct: "Meta"
+    },
+    {
+        question: "Which data structure uses FIFO?",
+        answers: ["Stack", "Queue", "Array", "Tree"],
+        correct: "Queue"
+    },
+    {
+        question: "What does CPU stand for?",
+        answers: [
+            "Central Process Unit",
+            "Central Processing Unit",
+            "Computer Processing Unit",
+            "Control Processing Unit"
+        ],
+        correct: "Central Processing Unit"
+    },
+    {
+        question: "Which is the tallest mountain in the world?",
+        answers: [
+            "K2",
+            "Mount Everest",
+            "Kangchenjunga",
+            "Makalu"
+        ],
+        correct: "Mount Everest"
+    },
+    {
+        question: "Which ocean is the largest?",
+        answers: [
+            "Indian Ocean",
+            "Atlantic Ocean",
+            "Pacific Ocean",
+            "Arctic Ocean"
+        ],
+        correct: "Pacific Ocean"
+    },
+    {
+        question: "What is the full form of HTML?",
+        answers: [
+            "Hyper Text Markup Language",
+            "High Text Machine Language",
+            "Hyper Tool Markup Language",
+            "Home Text Markup Language"
+        ],
+        correct: "Hyper Text Markup Language"
+    }
+];
+        const questionElement = document.getElementById("question");
+        const answerButtons = document.getElementById("answer-buttons");
+        const startBtn = document.getElementById("start-btn");
+        const nextBtn = document.getElementById("next-btn");
+
+        let currentQuestionIndex = 0;
+        let score = 0;
+        let selectedAnswer = null;
+
+        startBtn.addEventListener("click", startQuiz);
+
+        function startQuiz() {
+            currentQuestionIndex = 0;
+            score = 0;
+            selectedAnswer = null;
+
+            startBtn.style.display = "none";
+            nextBtn.style.display = "none";
+            nextBtn.innerText = "Next";
+
+            showQuestion();
+        }
+
+        function showQuestion() {
+            answerButtons.innerHTML = "";
+            selectedAnswer = null;
+
+            const currentQuestion = questions[currentQuestionIndex];
+
+            questionElement.innerHTML =
+                `${currentQuestionIndex + 1}. ${currentQuestion.question}`;
+
+            currentQuestion.answers.forEach(answer => {
+                const button = document.createElement("button");
+
+                button.innerText = answer;
+                button.classList.add("btn");
+
+                button.addEventListener("click", () => {
+                    selectAnswer(button, answer);
+                });
+
+                answerButtons.appendChild(button);
+            });
+        }
+
+        function selectAnswer(button, answer) {
+
+            Array.from(answerButtons.children).forEach(btn => {
+                btn.classList.remove("selected");
+            });
+
+            button.classList.add("selected");
+
+            selectedAnswer = answer;
+
+            nextBtn.style.display = "block";
+        }
+
+        nextBtn.addEventListener("click", () => {
+
+            if (nextBtn.innerText === "Play Again") {
+                startQuiz();
+                return;
+            }
+
+            if (selectedAnswer === null) {
+                return;
+            }
+
+            if (
+                selectedAnswer ===
+                questions[currentQuestionIndex].correct
+            ) {
+                score++;
+            }
+
+            currentQuestionIndex++;
+
+            if (currentQuestionIndex < questions.length) {
+                showQuestion();
+                nextBtn.style.display = "none";
+            } else {
+                showScore();
+            }
+        });
+
+        function showScore() {
+
+            questionElement.innerHTML =
+                `🎉 Your Score: ${score} / ${questions.length}`;
+
+            answerButtons.innerHTML = "";
+
+            nextBtn.innerText = "Play Again";
+            nextBtn.style.display = "block";
+        }
+    </script>
+
+</body>
+</html>
